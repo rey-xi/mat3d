@@ -91,8 +91,8 @@ main() {
 }
 ```
 
- - **Copy Constructor:** Mat3D can be duplicated as redirection from another 
- - 
+ - **Copy Constructor:** Mat3D can be duplicated as redirection to another
+   Mat3D object
 
 #### Example:
 ```dart
