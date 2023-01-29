@@ -77,7 +77,7 @@ main() {
 
 
  - **Parse Constructor:** Mat3D can be composed from a string source: result
-   calling [.toString()] on a Mat3D object.
+   calling .toString() on a Mat3D object.
 
 #### Example:
 ```dart
