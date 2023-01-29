@@ -10,7 +10,7 @@ A powerful yet easy to use utility to modify Matrix4 in flutter
 
 `pubspec.yaml`
 
-### Add super text to pubspec.yaml file
+### Add mat3D to pubspec.yaml file
 
 ```yaml
 
