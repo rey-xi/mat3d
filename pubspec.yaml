@@ -1,8 +1,8 @@
 name: mat3d
-description: Matrix4 Utility.
+description: Matrix4 Advanced Utility.
 version: 0.0.1
-homepage: none
-repository:
+homepage: https://github.com/rey-xi/mat3d/tree/master
+repository: https://github.com/rey-xi/mat3d
 
 
 environment:

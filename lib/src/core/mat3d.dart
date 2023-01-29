@@ -1,5 +1,6 @@
 library mat3d;
 
+import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -39,7 +40,7 @@ class Mat3D {
   /// This constructor ensures that [matrix] source is immune
   /// to changes on [Mat3D.matrix]. Don't consider using this
   /// constructor if the aim is to use this class as an helper
-  /// class, use [Mat3D.src] instead. [rect] is default value
+  /// class, use [Mat3D.raw] instead. [rect] is default value
   /// is [Rect.zero]. If matrix is null, [Matrix4.identity] will
   /// be used instead.
   /// ```dart
@@ -55,10 +56,10 @@ class Mat3D {
   /// easily transform nonassignable [Matrix4] fields via this
   /// very constructor.
   /// ```dart
-  /// final mat3D = Mat3D.audit(myMatrix, myRect)
+  /// final mat3D = Mat3D.raw(myMatrix, myRect)
   /// print(mat3D); [..storage](..rect)
   /// ```
-  Mat3D.src({required this.matrix, this.rect = Rect.zero});
+  Mat3D.raw({required this.matrix, this.rect = Rect.zero});
 
   /// The helper style constructor for Mat3D. operations on the
   /// object affects [matrix] same way if [matrix] is audited,
@@ -70,7 +71,31 @@ class Mat3D {
   /// print(mat3D); [..storage](..rect)
   /// ```
   factory Mat3D.from(Mat3D mat3D) {
-    return Mat3D.src(matrix: mat3D.matrix, rect: mat3D.rect);
+    //...
+    return Mat3D.raw(
+      matrix: mat3D.matrix,
+      rect: mat3D.rect,
+    );
+  }
+
+  factory Mat3D.parse(String source) {
+    final regex = RegExp(r'Mat3D(\[[0-9., ]+\])\(([0-9.]+), ?'
+        r'([0-9.]+), ?([0-9.]+), ?([0-9.]+),? ?\)');
+    final match = regex.matchAsPrefix(source);
+    if (match != null) {
+      final l = double.tryParse(match.group(2) ?? '0') ?? 0;
+      final t = double.tryParse(match.group(3) ?? '0') ?? 0;
+      final r = double.tryParse(match.group(4) ?? '0') ?? 0;
+      final b = double.tryParse(match.group(5) ?? '0') ?? 0;
+      final list = jsonDecode(match.group(1) ?? 'null') as List<num>?;
+      if (list == null) return Mat3D(rect: Rect.fromLTRB(l, t, r, b));
+      final storage = list.map((e) => e.toDouble()).toList();
+      return Mat3D(
+        matrix: Matrix4.fromFloat64List(Float64List.fromList(storage)),
+        rect: Rect.fromLTRB(l, t, r, b),
+      );
+    }
+    return Mat3D();
   }
 
   /// The helper style constructor for Mat3D. Combine multiple
@@ -148,11 +173,11 @@ class Mat3D {
   /// mat.translate(10.5);
   /// print(mat); // translate 21.0
   /// ```
-  Mat3D translate(double x, double y, {double? z, Offset? origin}) {
-    origin ??= center - rect.topLeft;
+  Mat3D translate(double x, [double? y, double? z]) {
+    final origin = center - rect.topLeft;
     matrix
       ..translate(origin.dx, origin.dy)
-      ..leftTranslate(x, y, z ?? 0.0)
+      ..leftTranslate(x, y ?? x, z ?? 0.0)
       ..translate(-origin.dx, -origin.dy);
     return this;
   }
@@ -244,8 +269,15 @@ class Mat3D {
   /// mat.forward(24.4).forward(-12.0);
   /// print(mat); // forward 36.8
   /// ```
-  Mat3D forward(double offset, {Offset? origin}) {
-    return translateX(offset, origin: origin);
+  Mat3D forward(
+    double offset, {
+    Offset? origin,
+    TextDirection direction = TextDirection.ltr,
+  }) {
+    if (direction == TextDirection.ltr) {
+      return translateX(offset, origin: origin);
+    }
+    return translateX(-offset, origin: origin);
   }
 
   /// Translate Mat3D object reverse over [offset]
@@ -254,8 +286,15 @@ class Mat3D {
   /// mat.reverse(24.4).reverse(-12.0);
   /// print(mat); // reverse 36.8
   /// ```
-  Mat3D reverse(double offset, {Offset? origin}) {
-    return translateX(-offset, origin: origin);
+  Mat3D backward(
+    double offset, {
+    Offset? origin,
+    TextDirection direction = TextDirection.ltr,
+  }) {
+    if (direction == TextDirection.ltr) {
+      return translateX(-offset, origin: origin);
+    }
+    return translateX(offset, origin: origin);
   }
 
   /// Translate Mat3D object inward over [offset]
@@ -286,10 +325,10 @@ class Mat3D {
   /// mat.scale(2.5);
   /// print(mat); // scale 4.25
   /// ```
-  Mat3D scale(double x, double y, [double? z]) {
+  Mat3D scale(double x, [double? y, double? z]) {
     matrix
       ..translate(center.dx, center.dy)
-      ..scale(x, y, z ?? 1.0)
+      ..scale(x, y ?? x, z ?? 1.0)
       ..translate(-center.dx, -center.dy);
     return this;
   }
@@ -445,6 +484,6 @@ class Mat3D {
   Mat3D flipZ({Offset? origin}) => tiltZ(180, origin: origin);
 
   @override
-  String toString() => '$storage(${rect.left}, ${rect.top}'
+  String toString() => 'Mat3D$storage(${rect.left}, ${rect.top}'
       ', ${rect.right}, ${rect.bottom})';
 }

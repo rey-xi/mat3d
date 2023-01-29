@@ -1,3 +1,3 @@
 library mat3d;
 
-export 'src/mat3d.dart';
+export 'src/core/mat3d.dart';

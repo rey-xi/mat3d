@@ -64,8 +64,8 @@ abstract class Mat3DMixin<T extends Mat3DMixin<T>> implements Mat3D {
   }
 
   @override
-  T translate(double x, double y, {double? z, Offset? origin}) {
-    Mat3D.from(this).translate(x, y, z: z, origin: origin);
+  T translate(double x, [double? y, double? z]) {
+    Mat3D.from(this).translate(x, y, z);
     return this as T;
   }
 
@@ -100,14 +100,30 @@ abstract class Mat3DMixin<T extends Mat3DMixin<T>> implements Mat3D {
   }
 
   @override
-  T forward(double offset, {Offset? origin}) {
-    Mat3D.from(this).forward(offset, origin: origin);
+  T forward(
+    double offset, {
+    Offset? origin,
+    direction = TextDirection.ltr,
+  }) {
+    Mat3D.from(this).forward(
+      offset,
+      origin: origin,
+      direction: direction,
+    );
     return this as T;
   }
 
   @override
-  T reverse(double offset, {Offset? origin}) {
-    Mat3D.from(this).reverse(offset, origin: origin);
+  T backward(
+    double offset, {
+    Offset? origin,
+    direction = TextDirection.ltr,
+  }) {
+    Mat3D.from(this).backward(
+      offset,
+      origin: origin,
+      direction: direction,
+    );
     return this as T;
   }
 
@@ -130,7 +146,7 @@ abstract class Mat3DMixin<T extends Mat3DMixin<T>> implements Mat3D {
   }
 
   @override
-  T scale(double x, double y, [double? z]) {
+  T scale(double x, [double? y, double? z]) {
     Mat3D.from(this).scale(x, y, z);
     return this as T;
   }
