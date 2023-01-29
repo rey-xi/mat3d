@@ -2,9 +2,6 @@
 
 A powerful yet easy to use utility to modify Matrix4 in flutter
 
-<hr>
-
-<hr>
 
 ## Getting Started
 
