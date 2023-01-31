@@ -42,11 +42,13 @@ dependencies:
 
 ```
 
-## Constructors
+## Usage
 
- - **Main Constructor:** Mat3D can be created from optional Matrix4 and Rect. 
+#### Main Constructor
+ 
+Mat3D can be created from optional Matrix4 and Rect. 
 
-#### Example:
+###### Example:
 ```dart
 main() {
     final matrix4 = Matrix4.identity();
@@ -57,10 +59,11 @@ main() {
 ```
 
 
- - **Raw Constructor:** Mat3D can be created to tweak a Matrix4 value using
-   a given rect. 
+#### Raw Constructor
 
-#### Example:
+Mat3D can be created to tweak a Matrix4 value using a given rect. 
+
+###### Example:
 ```dart
 main() {
   final matrix4 = Matrix4.identity();
@@ -73,10 +76,12 @@ main() {
 ```
 
 
- - **Parse Constructor:** Mat3D can be composed from a string source: result
-   calling .toString() on a Mat3D object.
+#### Parse Constructor
 
-#### Example:
+Mat3D can be composed from a string source: result calling .toString()
+on a Mat3D object.
+
+###### Example:
 ```dart
 main() {
   final matrix4 = Matrix4.identity();
@@ -88,10 +93,12 @@ main() {
 }
 ```
 
- - **Copy Constructor:** Mat3D can be duplicated as redirection to another
-   Mat3D object
 
-#### Example:
+#### Copy Constructor
+
+Mat3D can be duplicated as redirection to another Mat3D object
+
+###### Example:
 ```dart
 main() {
   final matrix4 = Matrix4.identity();
@@ -105,8 +112,8 @@ main() {
 }
 ```
 
-## Usage
 
+## Working Example
 ```dart
 import 'package:flutter/material.dart';
 import 'package:mat3d/mat3d.dart';
@@ -133,6 +140,5 @@ class Mat3DExample extends StatelessWidget {
     );
   }
 }
-
 ```
 ### Thanks
